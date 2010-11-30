@@ -22,8 +22,8 @@ type Postfix a = Word a
 
 {-1. Schreiben Sie eine Haskell-Rechenvorschrift isPostfix mit der Signatur isPostfix :: Eq a =>
 (Automaton a) -> StartState -> AcceptingStates -> (Postfix a) -> Bool. Angewendet auf
-einen Automaten A, einen Anfangszustand s, eine Menge von Endzust¨anden E und ein Wort p,
-ist das Resultat von isPostfix True, falls p Postfix eines von A bez¨uglich s und E akzeptierten
+einen Automaten A, einen Anfangszustand s, eine Menge von Endzuständen E und ein Wort p,
+ist das Resultat von isPostfix True, falls p Postfix eines von A bezüglich s und E akzeptierten
 Wortes ist, sonst False.
 -}
 
@@ -52,14 +52,28 @@ getNeighboursAM :: Eq a => (Automaton a) -> State -> [State]
 getNeighboursAM (AMg []) _ = []
 getNeighboursAM (AMg rows) state = [x | let row = (!!) rows (fromInteger state), i <- [0..((length row)-1)], let edge = (!!) row i, (length edge) > 0, let x = toInteger i]
 
+-- Diese Methode ermittelt die Liste aller Zustände, die aufgrund des übergebenen Wortes (z.B. "xb")
+-- in einen Endszustand (z.B. [0, 1, 2]) gelangen können.
 isReachableWithWord :: Eq a => (Automaton a) -> [State] -> (Postfix a) -> [State]  
 isReachableWithWord _ states [] = states
-isReachableWithWord automat states word = nub (isReachableWithWord automat [x | let letter = last word, x <- isReachableWith automat states letter] (take ((length word)-1) word))
+isReachableWithWord automat states word = nub (isReachableWithWord automat 
+                                                -- (isReachableWith automat states (last word)) instead of list comprehension?
+                                                [x | let letter = last word, x <- isReachableWith automat states letter] 
+                                                -- More readable? (init word))
+                                                (take ((length word)-1) word))
 
+-- Diese Methode ermittelt die Liste der Zustände die einen Übergang mit dem übergebenen Kantenwert (z.B. 'a')
+-- zu einen der übergebenen Endzustände besitzen (z.B. [0, 1, 2]).
 isReachableWith :: Eq a => (Automaton a) -> [State] -> a -> [State]
 isReachableWith (AMg []) _ _ = []
 isReachableWith _ [] _ = []
-isReachableWith (AMg rows) states a = nub [ x | s <- states, i <- [0..((length rows)-1)], let row = (!!) rows i, let edge = (!!) row (fromInteger s), elem a edge == True, let x = toInteger i]
+isReachableWith (AMg rows) states a = nub [ x | s <- states,
+                                                i <- [0..((length rows)-1)], -- Indizes der Elemente in einer Row.
+                                                let row = (!!) rows i, 
+                                                let edge = (!!) row (fromInteger s), -- Kantenwert an Position des Endzustands.
+                                                elem a edge == True, -- Erfolgskriterium: Wenn Kantenwert den 
+                                                                     -- übergebenen Kantenwert enthält.
+                                                let x = toInteger i ]
 
 {-2. Schreiben Sie eine Haskell-Rechenvorschrift givePrefix mit der Signatur givePrefix :: Eq a =>
 (Automaton a) -> StartState -> AcceptingStates -> (Postfix a) -> (Maybe (Prefix a)).

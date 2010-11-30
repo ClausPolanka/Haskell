@@ -39,11 +39,15 @@ isPostfix automat start end word
 reachableFrom :: Eq a => (Automaton a) -> State -> State -> Bool
 reachableFrom automat start state = isReachable automat [start] [] state
 			
+-- Diese Methode wandert den Pfad vom Startzustand (3. Argument) entlang, bis
+-- sie den gesuchten Zustand (4. Argument) erreicht hat. In diesem Fall wird
+-- True zurückgegeben, ansonsten False. Meines erachtens wird das Durchwandern
+-- hier mittels Breitensuche implementiert.
 isReachable :: Eq a => (Automaton a) -> [State] -> [State] -> State -> Bool 
 isReachable (AMg []) _ _ _ = False
 isReachable _ [] visited state = elem state visited
-isReachable automat todo@(x:xs) visited state
-	| (elem state n) == True = True
+isReachable automat todo@(x:xs) visited state -- Does todo mean something? 
+	| (elem state n) == True = True -- One True is enough in that case.
 	| otherwise = isReachable automat ((xs++n)\\(x:visited)) (x:visited) state
 		where
 			n = (getNeighboursAM automat x)

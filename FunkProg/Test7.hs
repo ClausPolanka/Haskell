@@ -27,8 +27,8 @@ b1_t1 = TestCase (assertTrue "ab" (isPostfix b1_a1 0 [0,2,3] "ab"))
 b1_t2 = TestCase (assertFalse "aba" (isPostfix b1_a1 0 [0,2,3] "aba"))
 
 -- Beachten Sie, dass das Resultat i.a. nicht eindeutig festgelegt ist
-b2_t1 = TestCase (assertEqual "givePrefix b1_a1 0 [0,2,3] \"ab\" == (Just \"a\")" (Just "a") (givePrefix b1_a1 0 [0,2,3] "ab"))
-b2_t2 = TestCase (assertEqual "givePrefix b1_a1 0 [0,2,3] \"aba\" == Nothing" Nothing (givePrefix b1_a1 0 [0,2,3] "aba"))
+b2_t1 = TestCase (assertEqual "givePrefix b2_t1 0 [0,2,3] \"ab\" == (Just \"a\")" (Just "d") (givePrefix b1_a1 0 [0,2,3] "ab"))
+b2_t2 = TestCase (assertEqual "givePrefix b2_t2 0 [0,2,3] \"aba\" == Nothing" Nothing (givePrefix b1_a1 0 [0,2,3] "aba"))
 
 
 b1_a2 = (AMg [	(["","F","","","","","","","",""]),

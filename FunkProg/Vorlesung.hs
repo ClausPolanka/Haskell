@@ -121,6 +121,7 @@ type Tiefgang = Float
 type Heimathafen = String
 type Reichweite = Float
 type Sitzplaetze = Int
+type Student = (String, String, Int)
 
 type Euro = Float
 type Yen = Float
@@ -222,7 +223,9 @@ flip' f x y = f y x
 fancySelect :: [Int] -> [Int]
 fancySelect xs = filter (42<) . map (2*) $ xs
     
-    
+-- Selektorfunktionen
+name (n, e, k) = n
+
     
     
     

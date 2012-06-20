@@ -1,0 +1,32 @@
+-- Aufgabe 4.1(a)
+
+t1 = (Node 11 (Leaf 21) (Node 22 (Leaf 31) (Leaf 32)))
+
+writeLayer t1 BottomUp == [[31,32],[21,22],[11]]
+writeLayer t1 TopDown == [[11],[21,22],[31,32]]
+
+
+-- Aufgabe 4.1(b)
+
+t2 = (Node 5 (Node 5 (Leaf 4) (Leaf 2)) (Node 3 (Leaf 1) (Leaf 3)))
+
+transform t2 == (SNode 3 (SNode 2 (SNode 1 Nil Nil) Nil) (SNode 5 (SNode 4 Nil 
+Nil) Nil))
+
+-- Aufgabe 4.2(a)
+
+g = Graph [ (1, [(2,5),(2,(-5)),(3,10)]),
+            (2, [(3,2),(5,2)]),
+            (3, [(3,1)]),
+            (4, [])
+          ]
+
+path g 1 3 5 == Yes
+path g 3 5 0 == No
+path g 2 7 9 == Invalid
+            
+-- Aufgabe 4.2(b)
+
+minpath g 1 3 == ([1,2,3],7) 
+minpath g 3 4 == ([],0)
+minpath g 3 8 == ([],0)
